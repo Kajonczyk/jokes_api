@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:15.2-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kamil
+      POSTGRES_DB: revotly
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
