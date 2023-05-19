@@ -1,12 +1,11 @@
 import {Module} from '@nestjs/common';
 import {AuthModule} from './auth/auth.module';
 import {UsersModule} from './users/users.module';
-import { TodoModule } from './todo/todo.module';
-import {PrismaService} from './prisma/prisma.service';
-import { TaskModule } from './task/task.module';
-
+import {PrismaService} from "./prisma/prisma.service"
+import { RoomModule } from './room/room.module';
+import { GameModule } from './game/game.module';
 @Module({
-	imports: [AuthModule, UsersModule, TodoModule, TaskModule],
+	imports: [AuthModule, UsersModule, RoomModule, GameModule],
 	providers: [PrismaService]
 })
 export class AppModule {

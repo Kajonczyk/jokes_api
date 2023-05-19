@@ -17,6 +17,10 @@ export class UsersService {
 	}
 
 
+	get(){
+		return this.prismaService.user.findMany()
+	}
+
 	create(user: UserDto){
 		const hashedPassword = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
 		return this.prismaService.user.create({
@@ -24,7 +28,7 @@ export class UsersService {
 		})
 	}
 
-	delete(id: number){
+	delete(id: string){
 		return this.prismaService.user.delete({
 			where: {
 				id
@@ -32,7 +36,7 @@ export class UsersService {
 		})
 	}
 
-	put(id: number, user: UserDto){
+	put(id: string, user: UserDto){
 		return this.prismaService.user.update({
 			where: {
 				id

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "lists" ALTER COLUMN "createdAt" SET DATA TYPE BIGINT;

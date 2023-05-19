@@ -11,33 +11,82 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid())
   email    String
   password String
-  todoLists List[]
-
-  @@map("users")
+  userName String
+  role     Int    @default(200)
+  games    Game[]
+  room     Room[]
 }
 
+model Room {
+  id           String @id @default(uuid())
+  ownerId      String
+  name         String @unique
+  membersCount Int?   @default(0)
+  membersLimit Int
+  users        User[]
 
-model List {
-	id Int @default(autoincrement()) @id
-	name String
-	tasks Task[]
-	user User? @relation(fields: [userId], references: [id])
-	userId Int
-	createdAt DateTime @default(now())
-
-	@@map("lists")
+  game   Game?   @relation(fields: [gameId], references: [id])
+  gameId String?
 }
 
-model Task {
-	id Int @default(autoincrement()) @id
-	name String
-	list List? @relation(fields: [todoListId], references: [id])
-	todoListId Int
-	createdAt DateTime @default(now())
-	active Boolean
-
-	@@map("tasks")
+model Game {
+  id         String    @id @default(uuid())
+  roomId     String    @unique
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  rounds     Int
+  turns      Turn[]
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+  room       Room[]
 }
+
+model Turn {
+  id         String @id @default(uuid())
+  gameId     String
+  game       Game   @relation(fields: [gameId], references: [id])
+  score      Score  @relation(fields: [scoreId], references: [id])
+  joke       Joke   @relation(fields: [jokeId], references: [id])
+  turnUserId String
+  nextTurnId String
+  status     String
+
+  scoreId String @unique()
+  jokeId  String @unique()
+}
+
+model Joke {
+  id      String @id @default(uuid())
+  gameId  String
+  userId  String
+  content String
+  turn    Turn?
+}
+
+model Score {
+  id     String @id @default(uuid())
+  gameId String
+  userId String
+  amount Int
+  turn   Turn?
+}
+
+//
+//model Joke {
+//  id      String @id @default(uuid())
+//  game    Game?  @relation(fields: [gameId], references: [id])
+//  gameId  String @unique()
+//  userId  String
+//  content String
+//}
+//
+//model Score {
+//  id     String @id @default(uuid())
+//  game   Game?  @relation(fields: [gameId], references: [id])
+//  gameId String
+//  userId String
+//  amount Int
+//}

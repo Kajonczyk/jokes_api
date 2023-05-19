@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: kamil
-      POSTGRES_DB: revotly
+      POSTGRES_DB: jokes
     volumes:
       - pgdata:/var/lib/postgresql/data
 volumes:
