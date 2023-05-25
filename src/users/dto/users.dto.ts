@@ -10,7 +10,6 @@ export class UserDto {
 	password: string;
 
 	@IsString()
-	@MinLength(3)
+	@MinLength(6)
 	userName: string;
 }
-
