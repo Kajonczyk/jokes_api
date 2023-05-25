@@ -1,0 +1,6 @@
+export enum TurnStatus {
+	CREATED = "CREATED",
+	ACTIVE = "ACTIVE",
+	CANCELLED = "CANCELLED",
+	COMPLETED = "COMPLETED",
+}

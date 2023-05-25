@@ -9,12 +9,12 @@ import {CorsOptions} from '@nestjs/common/interfaces/external/cors-options.inter
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prismaService = app.get(PrismaService)
-  const corsOptions: CorsOptions = {
-    origin: 'http://localhost:5173',
-    credentials: true,
-  };
+  // const corsOptions: CorsOptions = {
+  //   origin: 'http://localhost:5173',
+  //   credentials: true,
+  // };
 
-  app.enableCors(corsOptions);
+  // app.enableCors(corsOptions);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
   // app.use(cors())

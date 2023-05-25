@@ -17,7 +17,8 @@ model User {
   userName String
   role     Int    @default(200)
   games    Game[]
-  room     Room[]
+  room   Room?   @relation(fields: [roomId], references: [id])
+  roomId     String?
 }
 
 model Room {
@@ -48,14 +49,14 @@ model Turn {
   id         String @id @default(uuid())
   gameId     String
   game       Game   @relation(fields: [gameId], references: [id])
-  score      Score  @relation(fields: [scoreId], references: [id])
-  joke       Joke   @relation(fields: [jokeId], references: [id])
+  score      Score?  @relation(fields: [scoreId], references: [id])
+  joke       Joke?   @relation(fields: [jokeId], references: [id])
   turnUserId String
-  nextTurnId String
+  nextTurnId String?
   status     String
 
-  scoreId String @unique()
-  jokeId  String @unique()
+  scoreId String? @unique()
+  jokeId  String? @unique()
 }
 
 model Joke {
