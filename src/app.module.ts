@@ -6,9 +6,8 @@ import { RoomModule } from './room/room.module';
 import { GameModule } from './game/game.module';
 import { JokeModule } from './joke/joke.module';
 import {GameService} from './game/game.service';
-import {TurnsModule} from './turns/turns.module';
 @Module({
-	imports: [AuthModule, UsersModule, RoomModule, GameModule, JokeModule, TurnsModule],
+	imports: [AuthModule, UsersModule, RoomModule, GameModule, JokeModule],
 	exports: [GameModule],
 	providers: [PrismaService]
 })

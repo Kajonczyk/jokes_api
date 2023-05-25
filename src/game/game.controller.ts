@@ -2,22 +2,25 @@ import {Body, Controller, Delete, Get, Param, Post, Put, Req} from '@nestjs/comm
 import {GameService} from './game.service';
 import {CreateOrUpdateGameDto} from './dto/game.dto';
 
-@Controller('room/:roomId/game')
+@Controller('game/:gameId')
 export class GameController {
 
 	constructor(private gameService: GameService) {
 	}
 
-
 	@Get()
-	get(@Req() req, @Param("roomId") gameId: string){
+	get(@Req() req, @Param("gameId") gameId: string){
 		return this.gameService.get(gameId)
 	}
 
+	@Get("/points")
+	getPoints(@Param("gameId") gameId: string){
+		return this.gameService.getGamePoints(gameId)
+	}
+
 	@Post()
-	startGame(@Body() game: CreateOrUpdateGameDto, @Param("roomId") roomId){
-		console.log(1)
-		return this.gameService.startGame(game, roomId)
+	startGame(@Body() game: CreateOrUpdateGameDto, @Param("gameId") gameId){
+		return this.gameService.startGame(game, gameId)
 	}
 
 	@Delete(":id")

@@ -1,14 +1,14 @@
-import {Injectable, UnauthorizedException} from '@nestjs/common';
-import {PrismaService} from '../prisma/prisma.service';
+import {forwardRef, Inject, Injectable, UnauthorizedException} from '@nestjs/common';
+import {PrismaService} from '../../prisma/prisma.service';
 import type {User} from '@prisma/client';
 import {uuid} from 'uuidv4';
-import {TurnStatus} from '../enums/enums';
-import {GameService} from '../game/game.service';
+import {TurnStatus} from '../../enums/enums';
+import {GameService} from '../game.service';
 
 @Injectable()
 export class TurnsService {
 
-	constructor(private prismaService: PrismaService, ) {
+	constructor(private prismaService: PrismaService, @Inject(forwardRef(() => GameService)) private gameService: GameService) {
 	}
 
 
@@ -30,6 +30,7 @@ export class TurnsService {
 				status: index === 0 ? TurnStatus.ACTIVE : TurnStatus.CREATED,
 			}
 		})
+
 
 		await this.prismaService.turn.createMany({
 			data: generatedTurns
@@ -57,7 +58,6 @@ export class TurnsService {
 			throw new UnauthorizedException()
 		}
 
-		console.log(1)
 		await this.prismaService.turn.update({
 			where: { id: turn.id },
 			data: {
@@ -65,15 +65,9 @@ export class TurnsService {
 			}
 		})
 
-		console.log(2)
-
 		if(!turn.nextTurnId){
-			console.log(33333333333333333333333)
-
-			// return this.gameService.restartGame(gameId, roomId)
+			return this.gameService.restartGame(gameId, roomId)
 		}
-		console.log(44444454544545445454545454545454)
-
 
 		const newTurn = await this.prismaService.turn.update({
 			where: { id: turn.nextTurnId },
