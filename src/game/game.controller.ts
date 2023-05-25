@@ -5,20 +5,19 @@ import {CreateOrUpdateGameDto} from './dto/game.dto';
 @Controller('room/:roomId/game')
 export class GameController {
 
-
-
 	constructor(private gameService: GameService) {
 	}
 
-	//
+
 	@Get()
 	get(@Req() req, @Param("roomId") gameId: string){
 		return this.gameService.get(gameId)
 	}
 
 	@Post()
-	create(@Body() game: CreateOrUpdateGameDto, @Param("roomId") roomId){
-		return this.gameService.create(game, roomId)
+	startGame(@Body() game: CreateOrUpdateGameDto, @Param("roomId") roomId){
+		console.log(1)
+		return this.gameService.startGame(game, roomId)
 	}
 
 	@Delete(":id")
