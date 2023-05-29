@@ -6,10 +6,11 @@ import { RoomModule } from './room/room.module';
 import { GameModule } from './game/game.module';
 import { JokeModule } from './joke/joke.module';
 import {GameService} from './game/game.service';
+import { WsModule } from './ws/ws.module';
 @Module({
-	imports: [AuthModule, UsersModule, RoomModule, GameModule, JokeModule],
+	imports: [AuthModule, UsersModule, RoomModule, GameModule, JokeModule, WsModule],
 	exports: [GameModule],
-	providers: [PrismaService]
+	providers: [PrismaService, WsModule]
 })
 export class AppModule {
 }

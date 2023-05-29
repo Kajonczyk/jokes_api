@@ -20,7 +20,7 @@ export class JokeController {
 
 	@Post()
 	create(@Param("gameId") gameId, @Body() joke: CreateJokeDto, @Req() req){
-		return this.jokeService.create(gameId, joke, req.user.id)
+		return this.jokeService.create(gameId, joke.content, req.user.id)
 	}
 
 }

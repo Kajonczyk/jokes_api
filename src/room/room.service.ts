@@ -69,5 +69,33 @@ export class RoomService {
 		});
 	}
 
+	async joinRoom(roomId: string, userId: string){
+		await this.prismaService.room.update({
+			where: { id: roomId },
+			data: {
+				users: {
+					connect: { id: userId },
+				},
+				membersCount: {
+					increment: 1,
+				},
+			},
+		});
+	}
+
+	async disconnectFromRoom(roomId: string, userId: string) {
+		await this.prismaService.room.update({
+			where: { id: roomId },
+			data: {
+				users: {
+					disconnect: { id: userId },
+				},
+				membersCount: {
+					decrement: 1,
+				},
+			},
+		});
+	}
+
 
 }

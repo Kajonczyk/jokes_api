@@ -1,4 +1,4 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateOrUpdateGameDto} from './dto/game.dto';
 import {TurnsService} from './turns/turns.service';
@@ -58,7 +58,7 @@ export class GameService {
 		return users.map(user => ({...user, score: scoreByPlayer[user.id]}))
 	}
 
-	async startGame(game: CreateOrUpdateGameDto) {
+	async startGame(game: CreateOrUpdateGameDto, userId: string) {
 
 		const gameId = uuid()
 
@@ -73,6 +73,10 @@ export class GameService {
 
 		if(!room){
 			return new NotFoundException()
+		}
+
+		if(room.ownerId !== userId){
+			throw new UnauthorizedException()
 		}
 
 		if(room.gameId){

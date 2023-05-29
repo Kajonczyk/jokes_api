@@ -5,6 +5,7 @@ import {PrismaService} from '../prisma/prisma.service';
 
 @Module({
   controllers: [JokeController],
+  exports: [JokeService],
   providers: [JokeService, PrismaService]
 })
 export class JokeModule {}

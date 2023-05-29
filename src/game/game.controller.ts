@@ -1,7 +1,10 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Req} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import {GameService} from './game.service';
 import {CreateOrUpdateGameDto} from './dto/game.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
+
+@UseGuards(AuthGuard)
 @Controller('game')
 export class GameController {
 
@@ -19,8 +22,8 @@ export class GameController {
 	}
 
 	@Post()
-	startGame(@Body() game: CreateOrUpdateGameDto){
-		return this.gameService.startGame(game)
+	startGame(@Body() game: CreateOrUpdateGameDto, @Req() req){
+		return this.gameService.startGame(game, req.user.id)
 	}
 
 	@Delete(":gameId")

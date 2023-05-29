@@ -32,8 +32,7 @@ export class JokeService {
 	}
 
 
-	async create(gameId: string, createJokeDto: CreateJokeDto, creatingUserId) {
-		const {content} = createJokeDto;
+	async create(gameId: string, content: string, creatingUserId: string) {
 
 		try {
 			const game = await this.prismaService.game.findUnique({
