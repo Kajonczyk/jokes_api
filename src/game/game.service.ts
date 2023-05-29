@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateOrUpdateGameDto} from './dto/game.dto';
 import {TurnsService} from './turns/turns.service';
@@ -15,6 +15,13 @@ export class GameService {
 		return await this.prismaService.game.findFirst({
 			where: {
 				id
+			},
+			include: {
+				turns: {
+					include: {
+						joke: true
+					}
+				}
 			}
 		})
 
@@ -48,16 +55,16 @@ export class GameService {
 			}
 		})
 
-		return users.map(i => ({...i, score: scoreByPlayer[i.id]}))
+		return users.map(user => ({...user, score: scoreByPlayer[user.id]}))
 	}
 
-	async startGame(game: CreateOrUpdateGameDto, roomId: string) {
+	async startGame(game: CreateOrUpdateGameDto) {
 
 		const gameId = uuid()
 
 		const room = await this.prismaService.room.findFirst({
 			where: {
-				id: roomId
+				id: game.roomId
 			},
 			include: {
 				users: true
@@ -68,12 +75,16 @@ export class GameService {
 			return new NotFoundException()
 		}
 
+		if(room.gameId){
+			return new ConflictException()
+		}
+
 		const gameToCreate = {
 			...game,
 			id: gameId,
 			rounds: game.rounds,
-			roomId,
-			room: {connect: {id: roomId}},
+			roomId: game.roomId,
+			room: {connect: {id: game.roomId}},
 		};
 
 		await this.prismaService.game.create({

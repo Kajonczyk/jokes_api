@@ -9,40 +9,35 @@ export class JokeService {
 	constructor(private prismaService: PrismaService) {
 	}
 
-	async get(roomId: string){
-		const room = await this.prismaService.room.findUnique({
+	async get(gameId: string) {
+		const game = await this.prismaService.game.findUnique({
 			where: {
-				id: roomId
+				id: gameId
 			},
 			include: {
-				game: {
+				turns: {
+					where: {
+						status: TurnStatus.ACTIVE
+					},
 					include: {
-						turns: {
-							where: {
-								status:  TurnStatus.ACTIVE
-							},
-							include: {
-								joke: true
-							}
-						}
+						joke: true
 					}
 				}
 			}
 		});
 
-		console.log(room)
+		console.log(game.turns)
 
-
-		return room
+		return game.turns[0].joke
 	}
 
 
 	async create(gameId: string, createJokeDto: CreateJokeDto, creatingUserId) {
-		const { content } = createJokeDto;
+		const {content} = createJokeDto;
 
 		try {
 			const game = await this.prismaService.game.findUnique({
-				where: { id: gameId },
+				where: {id: gameId}
 			});
 
 			if (!game) {
@@ -50,11 +45,13 @@ export class JokeService {
 			}
 
 			const turn = await this.prismaService.turn.findFirst({
-				where: { gameId: game.id, status: TurnStatus.ACTIVE },
+				where: {gameId: game.id, status: TurnStatus.ACTIVE}
 			});
 
-			if(turn.turnUserId !== creatingUserId){
-				throw new UnauthorizedException()
+			console.log(turn.turnUserId, creatingUserId)
+
+			if (turn.turnUserId !== creatingUserId) {
+				throw new UnauthorizedException();
 			}
 
 			if (!turn) {
@@ -66,14 +63,14 @@ export class JokeService {
 					gameId: game.id,
 					userId: turn.turnUserId,
 					content,
-					turn: { connect: { id: turn.id } },
-				},
+					turn: {connect: {id: turn.id}}
+				}
 			});
 
 			return joke;
 		} catch (error) {
-			console.log(error)
-			throw new UnauthorizedException()
+			console.log(error);
+			throw new UnauthorizedException();
 		}
 	}
 }

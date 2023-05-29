@@ -22,11 +22,5 @@ export class JokeController {
 	create(@Param("gameId") gameId, @Body() joke: CreateJokeDto, @Req() req){
 		return this.jokeService.create(gameId, joke, req.user.id)
 	}
-	//
-	// @Delete(":id")
-	// delete(@Param("id") id: string){
-	// 	return this.jokeService.delete(id)
-	// }
-	//
 
 }
