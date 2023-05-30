@@ -10,7 +10,7 @@ export class AuthService {
 	}
 
 	async login(email: string, pwd: string){
-		const user = await this.usersService.findOne(email)
+		const user = await this.usersService.findOne({email})
 		const doPasswordMatch = bcrypt.compareSync(pwd, user.password)
 
 		if(!doPasswordMatch) {

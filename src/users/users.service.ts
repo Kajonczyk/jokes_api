@@ -8,10 +8,12 @@ export class UsersService {
 	constructor(private prismaService: PrismaService) {
 	}
 
-	findOne(email: string) {
+	findOne({email, id}: {email?: string, id?: string}) {
+		const condition = email ? {email} : {id}
+		console.log(condition)
 		return this.prismaService.user.findFirstOrThrow({
 			where: {
-				email
+				...condition
 			}
 		})
 	}
