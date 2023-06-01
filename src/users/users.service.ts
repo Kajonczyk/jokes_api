@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {ConflictException, Injectable} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {UserDto} from './dto/users.dto';
 import * as bcrypt from "bcrypt"
@@ -8,10 +8,10 @@ export class UsersService {
 	constructor(private prismaService: PrismaService) {
 	}
 
-	findOne({email, id}: {email?: string, id?: string}) {
-		const condition = email ? {email} : {id}
+	findOne({userName, id}: {userName?: string, id?: string}) {
+		const condition = userName ? {userName} : {id}
 		console.log(condition)
-		return this.prismaService.user.findFirstOrThrow({
+		return this.prismaService.user.findFirst({
 			where: {
 				...condition
 			}
@@ -23,7 +23,14 @@ export class UsersService {
 		return this.prismaService.user.findMany()
 	}
 
-	create(user: UserDto){
+	async create(user: UserDto){
+		const userToCreate = await this.findOne({userName: user.userName})
+
+		console.log(userToCreate, "LPSSKSKS")
+		if(userToCreate){
+			throw new ConflictException("User exists")
+		}
+
 		const hashedPassword = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
 		return this.prismaService.user.create({
 			data: {...user, password: hashedPassword}
