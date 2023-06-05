@@ -18,9 +18,8 @@ export class UsersService {
 		})
 	}
 
-
-	get(){
-		return this.prismaService.user.findMany()
+	getUserInfo(id){
+		return this.findOne({id})
 	}
 
 	async create(user: UserDto){
