@@ -17,7 +17,7 @@ async function bootstrap() {
   app.enableCors(corsOptions);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
-  app.use(cors())
+  app.use(cors(corsOptions));
 
   await prismaService.enableShutdownHooks(app)
   await app.listen(3000);

@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Req, UseGuards} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {UserDto} from './dto/users.dto';
 import {AuthGuard} from '../auth/auth.guard';
@@ -11,9 +11,18 @@ export class UsersController {
 
 
 	@UseGuards(AuthGuard)
-	@Get()
-	getUserInfo(@Req() req){
-		return this.usersService.getUserInfo(req.user.id)
+	@Get("/user")
+	async getUserInfo(@Req() req){
+		const user = await this.usersService.getUserInfo(req.user.id)
+
+		if(!user) {
+			throw new NotFoundException()
+		}
+
+
+		const {password, ...restUser} = user;
+
+		return restUser
 	}
 
 	@Post()
