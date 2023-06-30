@@ -16,6 +16,12 @@ export class RoomController {
 		return this.roomService.get()
 	}
 
+
+	@Get(":id")
+	getRoomInfo(@Param("id") id: string){
+		return this.roomService.getRoomInfo(id)
+	}
+
 	@Post()
 	create(@Body() room: CreateOrUpdateRoomDto, @Req() req){
 		return this.roomService.create(room, req.user.id)

@@ -1,7 +1,6 @@
 import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {TurnStatus} from '../enums/enums';
-import {CreateJokeDto} from './dto/joke.dto';
 
 @Injectable()
 export class JokeService {
@@ -9,7 +8,15 @@ export class JokeService {
 	constructor(private prismaService: PrismaService) {
 	}
 
-	async get(gameId: string) {
+	async get(gameId: string, queryAll = false) {
+
+		if (queryAll) {
+			return await this.prismaService.joke.findMany({
+				where: {
+					gameId
+				}
+			});
+		}
 		const game = await this.prismaService.game.findUnique({
 			where: {
 				id: gameId
@@ -26,9 +33,10 @@ export class JokeService {
 			}
 		});
 
-		console.log(game.turns)
+		console.log(game)
 
-		return game.turns[0].joke
+		return game.turns[0].joke;
+
 	}
 
 
@@ -47,7 +55,7 @@ export class JokeService {
 				where: {gameId: game.id, status: TurnStatus.ACTIVE}
 			});
 
-			console.log(turn.turnUserId, creatingUserId)
+			console.log(turn.turnUserId, creatingUserId);
 
 			if (turn.turnUserId !== creatingUserId) {
 				throw new UnauthorizedException();

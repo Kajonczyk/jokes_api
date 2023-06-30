@@ -13,7 +13,7 @@ export class AuthController {
 	async login(@Body() data: UserDto, @Res() res) {
 		const user = await this.authService.login(data);
 
-		const token = this.jwtService.sign({id: user.id, name: user.userName});
+		const token = this.jwtService.sign({...user});
 
 		return res.cookie('access_token', token, {
 			httpOnly: true,
@@ -26,7 +26,7 @@ export class AuthController {
 	@Post('register')
 	async register(@Body() data: UserDto, @Res() res) {
 		const registeredUser = await this.authService.register(data);
-		const token = this.jwtService.sign({id: registeredUser.id, name: registeredUser.userName});
+		const token = this.jwtService.sign({...registeredUser});
 
 		return res.cookie('access_token', token, {
 			httpOnly: true,

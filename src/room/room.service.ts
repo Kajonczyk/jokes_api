@@ -22,6 +22,22 @@ export class RoomService {
 		return this.prismaService.room.findMany();
 	}
 
+	getRoomInfo(id: string){
+		return this.prismaService.room.findFirst({
+			where: {
+				id
+			},
+			include: {
+				users: true,
+				game: {
+					include: {
+						turns: true
+					}
+				}
+			}
+		})
+	}
+
 	async create(room: CreateOrUpdateRoomDto, ownerId: string) {
 
 		const doesRoomWithThisNameExist = await this.prismaService.room.findFirst({
@@ -70,7 +86,7 @@ export class RoomService {
 	}
 
 	async joinRoom(roomId: string, userId: string){
-		await this.prismaService.room.update({
+		return await this.prismaService.room.update({
 			where: { id: roomId },
 			data: {
 				users: {
@@ -81,6 +97,8 @@ export class RoomService {
 				},
 			},
 		});
+
+
 	}
 
 	async disconnectFromRoom(roomId: string, userId: string) {

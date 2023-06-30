@@ -19,7 +19,6 @@ export class UsersController {
 			throw new NotFoundException()
 		}
 
-
 		const {password, ...restUser} = user;
 
 		return restUser
