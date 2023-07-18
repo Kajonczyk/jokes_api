@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import {GameService} from './game.service';
-import {CreateOrUpdateGameDto} from './dto/game.dto';
+import {AddGamePointsDto, CreateOrUpdateGameDto} from './dto/game.dto';
 import { AuthGuard } from '../auth/auth.guard';
 
 
@@ -19,6 +19,11 @@ export class GameController {
 	@Get(":gameId/points")
 	getPoints(@Param("gameId") gameId: string){
 		return this.gameService.getGamePoints(gameId)
+	}
+
+	@Post(":gameId/points")
+	addGamePoints(@Param("gameId") gameId: string, @Body() data: AddGamePointsDto, @Req() req){
+		return this.gameService.addGamePoints(gameId, req.user.id, data.amount, data.turnId)
 	}
 
 	@Post()

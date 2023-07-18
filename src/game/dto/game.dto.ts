@@ -12,4 +12,15 @@ export class CreateOrUpdateGameDto {
 
 }
 
+export class AddGamePointsDto {
+
+	@IsNotEmpty()
+	@IsNumber()
+	amount: number
+
+	@IsNotEmpty()
+	@IsString()
+	turnId: string
+}
+
 

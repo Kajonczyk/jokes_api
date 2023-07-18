@@ -33,9 +33,7 @@ export class JokeService {
 			}
 		});
 
-		console.log(game)
-
-		return game.turns[0].joke;
+		return game?.turns[0]?.joke;
 
 	}
 
@@ -57,9 +55,9 @@ export class JokeService {
 
 			console.log(turn.turnUserId, creatingUserId);
 
-			if (turn.turnUserId !== creatingUserId) {
-				throw new UnauthorizedException();
-			}
+			// if (turn.turnUserId !== creatingUserId) {
+			// 	throw new UnauthorizedException();
+			// }
 
 			if (!turn) {
 				throw new Error('No turns found');

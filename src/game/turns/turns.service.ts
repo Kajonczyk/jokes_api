@@ -54,9 +54,15 @@ export class TurnsService {
 			where: { gameId, status: TurnStatus.ACTIVE },
 		})
 
-		if(turn.turnUserId !== userId){
-			throw new UnauthorizedException()
-		}
+
+
+		console.log("NIBY TURN", turn)
+
+		// if(turn.turnUserId !== userId){
+		// 	throw new UnauthorizedException()
+		// }
+
+		console.log("CURRENT TURN TO: ", turn)
 
 		await this.prismaService.turn.update({
 			where: { id: turn.id },
@@ -76,6 +82,8 @@ export class TurnsService {
 			}
 		})
 
+
+		console.log("NOWA TURKA", newTurn)
 		return newTurn;
 	}
 }

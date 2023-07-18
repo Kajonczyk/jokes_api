@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prismaService = app.get(PrismaService)
   const corsOptions: CorsOptions = {
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'http://localhost:3000', 'http://localhost:3001', 'ws://localhost:3001'],
     credentials: true,
   };
 

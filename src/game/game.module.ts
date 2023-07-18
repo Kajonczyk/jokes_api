@@ -7,7 +7,7 @@ import {TurnsController} from './turns/turns.controller';
 
 @Module({
   controllers: [GameController, TurnsController],
-  exports: [TurnsService],
+  exports: [TurnsService, GameService],
   providers: [GameService, PrismaService, TurnsService]
 })
 export class GameModule {}

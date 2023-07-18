@@ -1,6 +1,7 @@
 import {ConflictException, Injectable, UnauthorizedException, UseGuards} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateOrUpdateRoomDto} from './dto/room.dto';
+import {TurnStatus} from '../enums/enums';
 
 
 @Injectable()
@@ -31,7 +32,12 @@ export class RoomService {
 				users: true,
 				game: {
 					include: {
-						turns: true
+						turns: {
+							where: {
+								status: TurnStatus.ACTIVE
+							},
+							take: 1
+						}
 					}
 				}
 			}
@@ -101,9 +107,15 @@ export class RoomService {
 
 	}
 
-	async disconnectFromRoom(roomId: string, userId: string) {
+	async disconnectFromRoom(_: string, userId: string) {
+
+		const user = await this.prismaService.user.findFirst({
+			where: {
+				id: userId
+			}
+		})
 		await this.prismaService.room.update({
-			where: { id: roomId },
+			where: { id: user.roomId },
 			data: {
 				users: {
 					disconnect: { id: userId },
